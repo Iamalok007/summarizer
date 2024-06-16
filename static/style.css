@@ -1,0 +1,73 @@
+body {
+    background-color: #14125a; /* Change this to your desired background color */
+}
+
+#content {
+    color: rgb(2, 11, 49);
+    text-align: center;
+    margin-top: 100px;
+}
+
+#heading {
+    font-size: 20px;
+    font-weight: bold;
+    color: #f5f5f5;
+    text-align: center;
+}
+
+#summarize-form {
+    background-color: #f4f4f4; /* Background color */
+    padding: 20px; /* Padding around the form */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Box shadow for a subtle effect */
+    margin: 0 auto; /* Center the form */
+    width: 50%; /* Set the width of the form */
+    border: 1px solid #ddd; /* Add a border */
+    display: flex; /* Use flexbox */
+    flex-direction: column; /* Arrange items vertically */
+    justify-content: center; /* Center items vertically */
+}
+
+#summarize-div {
+    margin-bottom: 20px; /* Add some space below the textarea */
+}
+
+textarea {
+    width: 100%; /* Make the textarea full width */
+    padding: 10px; /* Padding for the textarea */
+    border: 1px solid #ddd; /* Add a border to the textarea */
+    border-radius: 4px; /* Rounded corners for the textarea */
+}
+
+button {
+    background-color: #007bff; /* Button background color */
+    color: white; /* Button text color */
+    border: none; /* Remove button border */
+    padding: 10px 20px; /* Button padding */
+    border-radius: 4px; /* Rounded corners for the button */
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+button:hover {
+    background-color: #0056b3; /* Button background color on hover */
+}
+
+#result {
+    background-color: #f4f4f4; /* Background color */
+    padding: 20px; /* Padding around the result */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Box shadow for a subtle effect */
+    margin: 20px auto; /* Center the result */
+    width: 50%; /* Set the width of the result */
+    border: 1px solid #ddd; /* Add a border */
+}
+
+#result h2 {
+    margin-top: 0; /* Remove default margin for h2 elements */
+}
+
+#result p {
+    border: 1px solid #ddd; /* Add a border to the <p> elements */
+    padding: 10px; /* Add padding to the <p> elements */
+    border-radius: 4px; /* Rounded corners for the <p> elements */
+}

@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Text Summarizer</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+</head>
+<body>
+  <div id="heading">
+    <h1>Summarizer</h1>
+  </div>
+  <div id="content">
+    <button id="connect-button">Connect MetaMask</button>
+    
+    <form id="summarize-form" style="display:none;">
+      <div id="summarize-div">
+        <label for="text">Enter text to summarize:</label>
+        <textarea id="text" name="text" rows="10" cols="50"></textarea>
+      </div>
+      <button type="submit">Summarize</button>
+    </form>
+    
+    <div id="result" style="display:none;">
+      <h2>Original Text:</h2>
+      <p id="original-text"></p>
+      <h2>Summary:</h2>
+      <p id="summary"></p>
+      <h2>Digital Signature:</h2>
+      <p id="signature"></p>
+      <button id="download-button">Download PDF</button>
+    </div>
+
+    <form id="upload-form" style="display:none;">
+      <div id="upload-div">
+        <label for="file_path">File Path:</label><br>
+        <input type="text" id="file_path" name="file_path" required><br><br>
+
+        <label for="rpc_url">RPC URL:</label><br>
+        <input type="text" id="rpc_url" name="rpc_url" required><br><br>
+
+        <label for="flow_contract_address">Flow Contract Address:</label><br>
+        <input type="text" id="flow_contract_address" name="flow_contract_address" required><br><br>
+
+        <label for="private_key">Private Key:</label><br>
+        <input type="text" id="private_key" name="private_key" required><br><br>
+
+        <label for="tag_bytes">Tag Bytes:</label><br>
+        <input type="text" id="tag_bytes" name="tag_bytes" required><br><br>
+
+        <input type="submit" value="Upload">
+      </div>
+    </form>
+  </div>
+  
+  <script>
+   
+    document.getElementById('connect-button').addEventListener('click', async function() {
+        if (typeof window.ethereum !== 'undefined') {
+            try {
+                await ethereum.request({ method: 'eth_requestAccounts' });
+                document.getElementById('summarize-form').style.display = 'block';
+                document.getElementById('connect-button').style.display = 'none';
+            } catch (error) {
+                console.error('User denied account access:', error);
+                alert('Please allow MetaMask to connect.');
+            }
+        } else {
+            alert('Please install MetaMask!');
+        }
+    });
+
+    document.getElementById('summarize-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const text = document.getElementById('text').value;
+
+        try {
+            const response = await fetch('/summarize', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: text })
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            const summary = data.summary;
+
+            document.getElementById('original-text').innerText = text;
+            document.getElementById('summary').innerText = summary;
+
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+
+            const signature = await signer.signMessage(summary);
+
+            document.getElementById('signature').innerText = signature;
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('upload-button').style.display = 'block';
+
+            document.getElementById('upload-button').addEventListener('click', function() {
+                document.getElementById('result').style.display = 'none';
+                document.getElementById('upload-form').style.display = 'block';
+            });
+
+            document.getElementById('upload-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const file_path = document.getElementById('file_path').value;
+                const rpc_url = document.getElementById('rpc_url').value;
+                const flow_contract_address = document.getElementById('flow_contract_address').value;
+                const private_key = document.getElementById('private_key').value;
+                const tag_bytes = document.getElementById('tag_bytes').value;
+
+                try {
+                    const response = await fetch('/upload', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            file_path: file_path,
+                            rpc_url: rpc_url,
+                            flow_contract_address: flow_contract_address,
+                            private_key: private_key,
+                            tag_bytes: tag_bytes
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    alert('File uploaded successfully!');
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred while uploading the file: ' + error.message);
+                }
+            });
+
+            document.getElementById('download-button').addEventListener('click', async function() {
+                try {
+                    const response = await fetch('/download', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ summarized_text: summary, signature: signature })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'summary.pdf';
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred while downloading the PDF: ' + error.message);
+                }
+            });
+
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred: ' + error.message);
+        }
+    });
+</script>
+
+</body>
+</html>

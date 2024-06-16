@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Homepage</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav>
+
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#summaries">Summaries</a></li>
+      <li><a href="#footer">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Home Section -->
+  <div id="heading">
+    <h1>Welcome to Text Summarizer</h1>
+  </div>
+  <div id="content">
+    <p>Welcome to the Text Summarizer application. This tool allows you to summarize text and generate a digital signature for the summarized content.</p>
+    <button onclick="location.href='summarize'">Go to Summarizer</button>
+  </div>
+
+  <!-- About Section -->
+  <section id="about">
+    <h1>About</h1>
+    <p>This application helps you create concise summaries of your text and provides a digital signature for authenticity. It's designed to save you time and ensure the integrity of your summarized documents.</p>
+  </section>
+
+  <!-- Previous Summaries Section -->
+  <section id="summaries">
+    <h2>Previous Summaries</h2>
+    <div class="card-container">
+      <div class="card">
+        <h3>Summary 1</h3>
+        <p>Original Text: Lorem ipsum dolor sit amet...</p>
+        <p>Summary: Lorem ipsum...</p>
+        <p>Signature: 0xabc123...</p>
+      </div>
+      <div class="card">
+        <h3>Summary 2</h3>
+        <p>Original Text: Consectetur adipiscing elit...</p>
+        <p>Summary: Consectetur...</p>
+        <p>Signature: 0xdef456...</p>
+      </div>
+      <!-- Add more cards as needed -->
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <p>&copy; 2024 Text Summarizer. All rights reserved.</p>
+    <p>Contact us: <a href="mailto:info@textsummarizer.com">info@textsummarizer.com</a></p>
+  </footer>
+</body>
+</html>
